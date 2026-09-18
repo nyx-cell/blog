@@ -49,44 +49,62 @@ export function BlogList({
 
   return (
     <Page>
-      <div className='th-prompt'>
-        <span className='th-prompt-u'>perfectpan</span>
-        <span className='th-prompt-at'>@</span>
-        <span className='th-prompt-h'>blog</span>{' '}
-        <span className='th-prompt-p'>~/posts %</span>{' '}
-        <span className='th-cmd'>ls --group-directories-first</span>
+      <div className='flex flex-wrap items-baseline gap-2.5'>
+        <span className='text-chart-1'>perfectpan</span>
+        <span className='text-muted-foreground/60'>@</span>
+        <span className='text-chart-2'>blog</span>{' '}
+        <span className='text-primary'>~/posts %</span>{' '}
+        <span className='text-foreground hover:text-primary'>
+          ls --group-directories-first
+        </span>
       </div>
 
       {showDevHint ? (
-        <div className='th-devhint mt-4'>{devScopeHint}</div>
+        <div className='mb-4.5 rounded-md border border-dashed border-[color-mix(in_srgb,var(--primary)_50%,transparent)] bg-[color-mix(in_srgb,var(--primary)_6%,transparent)] px-3.5 py-2 text-sm text-primary mt-4'>
+          {devScopeHint}
+        </div>
       ) : null}
 
-      <div className={showVisibility ? 'th-ls th-ls--vis' : 'th-ls'}>
+      <div className='mt-3'>
         {blogGroups.map((group) => (
           <div key={group.year}>
-            <div className='th-ls-row'>
-              <span className='th-ls-year'>{group.year}</span>
+            <div
+              className={
+                showVisibility
+                  ? 'grid items-baseline gap-x-3.5 rounded px-2 py-1.25 text-foreground grid-cols-[7ch_8ch_1fr_auto] no-underline hover:bg-accent max-[720px]:grid-cols-[7ch_1fr]'
+                  : 'grid items-baseline gap-x-3.5 rounded px-2 py-1.25 text-foreground grid-cols-[7ch_1fr_auto] no-underline hover:bg-accent max-[720px]:grid-cols-[7ch_1fr]'
+              }
+            >
+              <span className='col-span-full mt-5 font-bold text-primary'>
+                {group.year}
+              </span>
             </div>
             {group.blogs.map((blog: PostSummary) => (
               <Link
                 key={blog.slug}
                 to='/blog/$slug'
                 params={{ slug: blog.slug }}
-                className='th-ls-row'
+                className={
+                  showVisibility
+                    ? 'grid items-baseline gap-x-3.5 rounded px-2 py-1.25 text-foreground grid-cols-[7ch_8ch_1fr_auto] no-underline hover:bg-accent max-[720px]:grid-cols-[7ch_1fr]'
+                    : 'grid items-baseline gap-x-3.5 rounded px-2 py-1.25 text-foreground grid-cols-[7ch_1fr_auto] no-underline hover:bg-accent max-[720px]:grid-cols-[7ch_1fr]'
+                }
               >
-                <span className='th-ls-date'>
+                <span className='text-sm text-muted-foreground'>
                   {new Date(blog.publishedAt).toLocaleDateString('en-US', {
                     month: '2-digit',
                     day: '2-digit',
                   })}
                 </span>
                 {showVisibility ? (
-                  <span className='th-ls-vis th-comment'>
+                  <span className='text-sm text-muted-foreground/60 max-[720px]:hidden'>
                     {blog.visibility}
                   </span>
                 ) : null}
-                <span className='th-ls-title'>{blog.title}</span>
-                <span className='th-ls-tags text-right'>
+                <span className='overflow-hidden text-ellipsis whitespace-nowrap'>
+                  {blog.title}
+                </span>
+                <span className='text-right text-xs text-muted-foreground/60 max-[720px]:hidden'>
                   {blog.tags.join(' · ')}
                 </span>
               </Link>
@@ -96,13 +114,16 @@ export function BlogList({
       </div>
 
       {data.totalPages > 1 ? (
-        <nav className='th-pager' aria-label='Pagination'>
+        <nav
+          className='mt-6.5 flex justify-center gap-4.5 text-sm text-muted-foreground [&_a]:text-primary'
+          aria-label='Pagination'
+        >
           {data.page > 1 ? (
             <Link to='/blog' search={{ page: data.page - 1 }}>
               ← prev
             </Link>
           ) : (
-            <span className='th-pager-off'>← prev</span>
+            <span className='text-muted-foreground/60 opacity-60'>← prev</span>
           )}
           <span>
             page {data.page} / {data.totalPages}
@@ -112,12 +133,12 @@ export function BlogList({
               next →
             </Link>
           ) : (
-            <span className='th-pager-off'>next →</span>
+            <span className='text-muted-foreground/60 opacity-60'>next →</span>
           )}
         </nav>
       ) : null}
 
-      <hr className='th-hr' />
+      <hr className='my-5 border-0 border-t border-dashed border-border' />
     </Page>
   );
 }

@@ -139,16 +139,19 @@ export function PostEditor({
         className='m-0 grid min-w-0 gap-5 border-0 p-0'
       >
         {error ? (
-          <p role='alert' className='th-err'>
+          <p role='alert' className='my-2.5 text-sm text-destructive'>
             {error}
           </p>
         ) : null}
 
-        <section className='th-panel grid gap-4'>
+        <section className='rounded-md border border-dashed border-border bg-secondary p-4 grid gap-4'>
           <label className='grid'>
-            <span className='th-flabel'>标题</span>
+            <span className='mb-1.25 block text-xs text-muted-foreground'>
+              <span className='text-primary'>▸ </span>
+              标题
+            </span>
             <input
-              className='th-input'
+              className='w-full rounded-md border border-border bg-background px-2.5 py-2 text-sm leading-snug text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-primary focus:shadow-[0_0_0_2px_color-mix(in_srgb,var(--primary)_15%,transparent)]'
               value={fields.title}
               onChange={(event) => setField('title', event.target.value)}
               placeholder='文章标题'
@@ -158,9 +161,12 @@ export function PostEditor({
 
           <div className='grid gap-4 sm:grid-cols-2'>
             <label className='grid'>
-              <span className='th-flabel'>Slug</span>
+              <span className='mb-1.25 block text-xs text-muted-foreground'>
+                <span className='text-primary'>▸ </span>
+                Slug
+              </span>
               <input
-                className='th-input'
+                className='w-full rounded-md border border-border bg-background px-2.5 py-2 text-sm leading-snug text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-primary focus:shadow-[0_0_0_2px_color-mix(in_srgb,var(--primary)_15%,transparent)]'
                 value={fields.slug}
                 onChange={(event) => setField('slug', event.target.value)}
                 placeholder='my-post'
@@ -169,10 +175,13 @@ export function PostEditor({
               />
             </label>
             <label className='grid'>
-              <span className='th-flabel'>发布日期</span>
+              <span className='mb-1.25 block text-xs text-muted-foreground'>
+                <span className='text-primary'>▸ </span>
+                发布日期
+              </span>
               <input
                 type='date'
-                className='th-input'
+                className='w-full rounded-md border border-border bg-background px-2.5 py-2 text-sm leading-snug text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-primary focus:shadow-[0_0_0_2px_color-mix(in_srgb,var(--primary)_15%,transparent)]'
                 value={fields.publishedAt}
                 onChange={(event) =>
                   setField('publishedAt', event.target.value)
@@ -183,9 +192,12 @@ export function PostEditor({
           </div>
 
           <label className='grid'>
-            <span className='th-flabel'>摘要</span>
+            <span className='mb-1.25 block text-xs text-muted-foreground'>
+              <span className='text-primary'>▸ </span>
+              摘要
+            </span>
             <textarea
-              className='th-input min-h-[64px] resize-y'
+              className='w-full rounded-md border border-border bg-background px-2.5 py-2 text-sm leading-snug text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-primary focus:shadow-[0_0_0_2px_color-mix(in_srgb,var(--primary)_15%,transparent)] min-h-16 resize-y'
               value={fields.description}
               onChange={(event) => setField('description', event.target.value)}
               placeholder='一句话描述这篇文章'
@@ -194,9 +206,12 @@ export function PostEditor({
           </label>
         </section>
 
-        <section className='th-panel grid gap-4'>
+        <section className='rounded-md border border-dashed border-border bg-secondary p-4 grid gap-4'>
           <div className='grid gap-2'>
-            <span className='th-flabel'>标签</span>
+            <span className='mb-1.25 block text-xs text-muted-foreground'>
+              <span className='text-primary'>▸ </span>
+              标签
+            </span>
             <TagInput
               value={fields.tags}
               onChange={(tags) => setField('tags', tags)}
@@ -207,14 +222,17 @@ export function PostEditor({
 
           <div className='grid gap-4 sm:grid-cols-3'>
             <div className='grid gap-2'>
-              <span className='th-flabel'>可见性</span>
+              <span className='mb-1.25 block text-xs text-muted-foreground'>
+                <span className='text-primary'>▸ </span>
+                可见性
+              </span>
               <Select
                 value={fields.visibility}
                 onValueChange={(value) =>
                   setField('visibility', value as FormState['visibility'])
                 }
               >
-                <SelectTrigger className='th-input' aria-label='可见性'>
+                <SelectTrigger aria-label='可见性'>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -227,14 +245,17 @@ export function PostEditor({
               </Select>
             </div>
             <div className='grid gap-2'>
-              <span className='th-flabel'>状态</span>
+              <span className='mb-1.25 block text-xs text-muted-foreground'>
+                <span className='text-primary'>▸ </span>
+                状态
+              </span>
               <Select
                 value={fields.status}
                 onValueChange={(value) =>
                   setField('status', value as FormState['status'])
                 }
               >
-                <SelectTrigger className='th-input' aria-label='状态'>
+                <SelectTrigger aria-label='状态'>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -245,9 +266,12 @@ export function PostEditor({
             </div>
             {fields.visibility === 'password' ? (
               <label className='grid'>
-                <span className='th-flabel'>密码</span>
+                <span className='mb-1.25 block text-xs text-muted-foreground'>
+                  <span className='text-primary'>▸ </span>
+                  密码
+                </span>
                 <input
-                  className='th-input'
+                  className='w-full rounded-md border border-border bg-background px-2.5 py-2 text-sm leading-snug text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-primary focus:shadow-[0_0_0_2px_color-mix(in_srgb,var(--primary)_15%,transparent)]'
                   value={fields.password}
                   onChange={(event) => setField('password', event.target.value)}
                   placeholder='访问密码'
@@ -258,7 +282,10 @@ export function PostEditor({
         </section>
 
         <section className='grid gap-2'>
-          <span className='th-flabel'>正文（Markdown）</span>
+          <span className='mb-1.25 block text-xs text-muted-foreground'>
+            <span className='text-primary'>▸ </span>
+            正文（Markdown）
+          </span>
           <MarkdownEditor
             value={fields.body}
             onChange={(body) => setField('body', body)}
@@ -269,7 +296,7 @@ export function PostEditor({
           <button
             type='submit'
             disabled={saving}
-            className='th-btn th-btn-primary'
+            className='cursor-pointer rounded-md border border-border bg-secondary px-3.5 py-1.75 text-sm leading-snug text-foreground transition-[border-color,color] duration-100 hover:border-primary hover:text-primary border-primary bg-primary text-primary-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground hover:brightness-95'
           >
             {saving ? '保存中…' : '保存'}
           </button>
@@ -280,7 +307,7 @@ export function PostEditor({
                 setConfirmDelete(true);
               }}
               disabled={saving}
-              className='th-btn th-btn-danger'
+              className='cursor-pointer rounded-md border border-border bg-secondary px-3.5 py-1.75 text-sm leading-snug text-foreground transition-[border-color,color] duration-100 hover:border-primary hover:text-primary border-[color-mix(in_srgb,var(--destructive)_45%,transparent)] text-destructive hover:border-destructive hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-destructive'
             >
               删除
             </button>

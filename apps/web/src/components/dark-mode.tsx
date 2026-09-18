@@ -3,6 +3,7 @@
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
+import { TOOL_BTN } from './term.js';
 
 type ViewTransitionLike = {
   finished: Promise<void>;
@@ -144,7 +145,7 @@ export function DarkMode() {
       type='button'
       ref={ref}
       aria-label={`Switch to ${next} mode (current: ${pref})`}
-      className='th-tool-btn th-dark-btn'
+      className={TOOL_BTN}
       onClick={onTrigger}
     >
       {pref === 'light' ? (

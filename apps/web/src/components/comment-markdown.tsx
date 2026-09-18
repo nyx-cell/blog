@@ -29,7 +29,7 @@ export function CommentMarkdown({ content }: CommentMarkdownProps) {
               href={href}
               target='_blank'
               rel='noreferrer'
-              className='text-blue-700/80 transition-colors hover:text-blue-700 dark:text-blue-400/80 dark:hover:text-blue-400'
+              className='text-primary/80 transition-colors hover:text-primary dark:text-primary/80 dark:hover:text-primary'
             >
               {children}
             </a>
@@ -43,7 +43,7 @@ export function CommentMarkdown({ content }: CommentMarkdownProps) {
             <ol className='mb-2 ml-4 list-decimal'>{children}</ol>
           ),
           blockquote: ({ children }) => (
-            <blockquote className='mb-2 border-l-2 border-zinc-300 pl-3 opacity-70 dark:border-zinc-600'>
+            <blockquote className='mb-2 border-l-2 border-border pl-3 opacity-70 dark:border-border'>
               {children}
             </blockquote>
           ),
@@ -55,13 +55,13 @@ export function CommentMarkdown({ content }: CommentMarkdownProps) {
               return <code className={className}>{children}</code>;
             }
             return (
-              <code className='rounded bg-zinc-100 px-1 py-0.5 font-mono text-[0.85em] dark:bg-zinc-800'>
+              <code className='rounded bg-secondary px-1 py-0.5 font-mono text-[0.85em] dark:bg-muted'>
                 {children}
               </code>
             );
           },
           pre: ({ children }) => (
-            <pre className='mb-2 overflow-x-auto rounded-md bg-zinc-50 p-3 text-[0.85em] dark:bg-zinc-900'>
+            <pre className='mb-2 overflow-x-auto rounded-md bg-secondary p-3 text-[0.85em] dark:bg-muted'>
               {children}
             </pre>
           ),

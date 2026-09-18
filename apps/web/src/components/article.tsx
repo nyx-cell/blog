@@ -34,19 +34,21 @@ export function ArticlePage({
 
   return (
     <Page>
-      <div className='th-prompt'>
-        <span className='th-prompt-u'>perfectpan</span>
-        <span className='th-prompt-at'>@</span>
-        <span className='th-prompt-h'>blog</span>{' '}
-        <span className='th-prompt-p'>~/posts %</span>{' '}
-        <span className='th-cmd'>
+      <div className='flex flex-wrap items-baseline gap-2.5'>
+        <span className='text-chart-1'>perfectpan</span>
+        <span className='text-muted-foreground/60'>@</span>
+        <span className='text-chart-2'>blog</span>{' '}
+        <span className='text-primary'>~/posts %</span>{' '}
+        <span className='text-foreground hover:text-primary'>
           cat {new Date(post.publishedAt).getFullYear()}/{post.slug}.md
         </span>
       </div>
 
-      <div className='th-art-head'>
-        <h1 className='th-art-title'>{post.title}</h1>
-        <div className='th-art-meta'>
+      <div className='mt-4 mb-6.5'>
+        <h1 className='text-3xl leading-snug font-bold text-foreground'>
+          {post.title}
+        </h1>
+        <div className='mt-1.5 flex flex-wrap gap-4 text-sm text-muted-foreground'>
           <span>{date}</span>
           <span>·</span>
           <span>{post.visibility}</span>
@@ -59,15 +61,15 @@ export function ArticlePage({
         </div>
       </div>
       <Markdown content={post.contentMdx} />
-      <div className='th-prompt mt-6'>
-        <span className='th-prompt-u'>perfectpan</span>
-        <span className='th-prompt-at'>@</span>
-        <span className='th-prompt-h'>blog</span>{' '}
-        <span className='th-prompt-p'>~/posts %</span>{' '}
+      <div className='flex flex-wrap items-baseline gap-2.5 mt-6'>
+        <span className='text-chart-1'>perfectpan</span>
+        <span className='text-muted-foreground/60'>@</span>
+        <span className='text-chart-2'>blog</span>{' '}
+        <span className='text-primary'>~/posts %</span>{' '}
         <Link
           to='/blog'
           activeOptions={{ exact: true }}
-          className='th-cmd th-cmd-dim'
+          className='text-foreground hover:text-primary text-muted-foreground hover:text-foreground'
         >
           cd ..
         </Link>

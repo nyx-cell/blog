@@ -13,7 +13,7 @@
     "db:migrate": "pnpm --filter @blog/web db:migrate",
     "db:migrate:local": "pnpm --filter @blog/web db:migrate:local",
     "cf-typegen": "pnpm --filter @blog/web cf-typegen",
-    "lint": "biome check ./apps ./packages",
+    "lint": "biome check ./apps ./packages && oxlint apps/web/src",
     "test": "vitest run",
     "test:watch": "vitest",
     "size": "pnpm --filter @blog/web size",
@@ -23,12 +23,12 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@playwright/test": "^1.61.1",
     "@biomejs/biome": "2.5.3",
-    "autoprefixer": "10.5.2",
+    "@playwright/test": "^1.61.1",
+    "@shadcn/lint": "^0.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.5",
-    "tailwindcss": "3.4.1",
+    "oxlint": "^1.83.0",
     "typescript": "^5.7.3",
     "vitest": "^4.1.11"
   },

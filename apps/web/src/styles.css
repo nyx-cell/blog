@@ -1,70 +1,137 @@
+@import "tailwindcss";
+@import "tw-animate-css";
 @import "katex/dist/katex.min.css";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+/* Tailwind v4, CSS-first config.
+   - dark: class-based toggle (html.dark)
+   - shadcn tokens: full oklch values below, consumed as plain var() — the
+     single token layer (an earlier duplicate HSL layer is gone)
+   - the shadcn tokens carry the full terminal palette (exact values); a
+     few decorative accents stay as literal hexes like the titlebar dots */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-mono:
+    ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas,
+    "PingFang SC", "Microsoft YaHei", monospace;
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+/* shadcn v4 base: v4 defaults borders to currentColor, the spec restores
+   the border token so the ui/* primitives keep their frame. */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+}
 
 /*
- * shadcn/ui token layer (Bundle 0). Mapped to the existing palette so the
- * rendered site is unchanged — the tokens only power the new ui/* primitives
- * (Command/Dialog). Light = white/near-black, dark = wash-dark/white, borders
- * = slate-300/slate-700. Nothing here re-styles body; the terminal skin
- * drives its own surface colors from html dark-mode tokens.
+ * Token layer — the single source. The shadcn variables carry the terminal
+ * palette (amber primary, navy dark surfaces) as oklch values; the raw --t-*
+ * palette — nothing else defines color.
  */
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 213 27% 84%;
-    --input: 213 27% 84%;
-    --ring: 0 0% 3.9%;
-    --radius: 0.5rem;
-  }
+:root {
+  --background: oklch(100% 0 0); /* #ffffff */
+  --foreground: oklch(33.191% 0.01 260.716); /* #33363b */
+  --card: oklch(99.107% 0 0); /* #fcfcfc */
+  --card-foreground: oklch(33.191% 0.01 260.716);
+  --popover: oklch(99.107% 0 0); /* #fcfcfc */
+  --popover-foreground: oklch(33.191% 0.01 260.716);
+  --primary: oklch(60.13% 0.109 72.621); /* #a8752b */
+  --primary-foreground: oklch(98.503% 0.004 91.446); /* #fbfaf7 */
+  --secondary: oklch(97.315% 0 0); /* #f6f6f6 */
+  --secondary-foreground: oklch(33.191% 0.01 260.716);
+  --muted: oklch(96.715% 0 0); /* #f4f4f4 */
+  --muted-foreground: oklch(55.881% 0.019 267.656); /* #6f7480 */
+  --accent: oklch(94.309% 0 0); /* #ececec */
+  --accent-foreground: oklch(33.191% 0.01 260.716);
+  --destructive: oklch(55.064% 0.147 27.492); /* #b8483f */
+  --destructive-foreground: oklch(98.503% 0.004 91.446);
+  --border: oklch(91.887% 0 0); /* #e4e4e4 */
+  --input: oklch(91.887% 0 0);
+  --ring: oklch(60.13% 0.109 72.621);
+  --chart-1: oklch(55.6% 0.088 216.6); /* #0e7d92 cyan */
+  --chart-2: oklch(48.8% 0.071 152.9); /* #3c7a52 green */
+  --chart-3: oklch(46.3% 0.095 296.5); /* #7a5fa8 violet */
+  --chart-4: oklch(33.191% 0.01 260.716); /* #33363b ink */
+  --radius: 0.375rem;
+}
 
-  .dark {
-    --background: 217 15% 16%;
-    --foreground: 0 0% 98%;
-    --card: 217 15% 18%;
-    --card-foreground: 0 0% 98%;
-    --popover: 217 15% 18%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 217 15% 20%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 217 15% 20%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 15% 24%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 50%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 215 25% 27%;
-    --input: 215 25% 27%;
-    --ring: 0 0% 83%;
-  }
+html.dark {
+  --background: oklch(16.557% 0.013 248.647); /* #0a0f14 */
+  --foreground: oklch(86.454% 0.018 245.416); /* #c9d4de */
+  --card: oklch(17.894% 0.016 248.71); /* #0c1218 */
+  --card-foreground: oklch(86.454% 0.018 245.416);
+  --popover: oklch(17.894% 0.016 248.71); /* #0c1218 */
+  --popover-foreground: oklch(86.454% 0.018 245.416);
+  --primary: oklch(79.954% 0.134 81.415); /* #e9b44c */
+  --primary-foreground: oklch(18.173% 0.023 82.824); /* #171106 */
+  --secondary: oklch(20.969% 0.024 251.591); /* #101923 */
+  --secondary-foreground: oklch(86.454% 0.018 245.416);
+  --muted: oklch(19.742% 0.017 252.556); /* #10161d */
+  --muted-foreground: oklch(59.74% 0.028 240.959); /* #71828f */
+  --accent: oklch(24.668% 0.029 249.049); /* #16222e */
+  --accent-foreground: oklch(86.454% 0.018 245.416);
+  --destructive: oklch(67.086% 0.145 16.999); /* #e06c75 */
+  --destructive-foreground: oklch(98.503% 0.004 91.446);
+  --border: oklch(27.924% 0.03 248.948); /* #1d2a37 */
+  --input: oklch(27.924% 0.03 248.948);
+  --ring: oklch(79.954% 0.134 81.415);
+  --chart-1: oklch(79.5% 0.086 216.5); /* #6fc5d8 cyan */
+  --chart-2: oklch(76.3% 0.1 152.6); /* #7cbf8b green */
+  --chart-3: oklch(68.3% 0.1 296.5); /* #a78bc4 violet */
+  --chart-4: oklch(16.557% 0.013 248.647); /* #0a0f14 ink */
 }
 
 @layer base {
   html {
-    font-family: "Merriweather", "Georgia", serif;
+    font-family: var(--font-mono);
     /* Themed page background so any overscroll reveals a matching color
        instead of the transparent/default canvas. The elastic bounce itself
-       lives on the content scroll container in layout.tsx (left at the
-       default so it rubber-bands); the header sits outside it and stays put. */
-    background-color: hsl(var(--background));
+       lives on the content scroll container in layout.tsx; the header sits
+       outside it and stays put. */
+    background-color: var(--background);
+  }
+
+  body {
+    font-family: var(--font-mono);
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: 15.5px;
+    line-height: 1.75;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--primary) 25%, transparent);
   }
 
   /* Visible focus only for keyboard / AT navigation — mouse clicks stay clean.
@@ -90,14 +157,6 @@
   z-index: 1;
 }
 
-.dark::view-transition-old(root) {
-  z-index: 1;
-}
-
-.dark::view-transition-new(root) {
-  z-index: 9999;
-}
-
 /* Dark-mode circular reveal. dark-mode.tsx bakes the measured icon position
    into a `dark-mode-reveal` @keyframes rule as viewport percentages (injected
    as a <style> before startViewTransition) and adds .vt-dark-reveal on <html>.
@@ -108,10 +167,7 @@
    pixel coordinates on DPR-2 screens. Percentages resolve against the
    pseudo's own box, correct in every coordinate space. `forwards` holds the
    terminal clip so the swapped-away layer cannot flash unclipped for a frame
-   when the animation ends. The slow-start cubic-bezier keeps the circle
-   small (~140px) around the icon for the first ~150ms — the legible origin
-   — then sweeps; a single curve avoids the mid-animation hitch that chained
-   per-segment easings produced. */
+   when the animation ends. */
 .vt-dark-reveal.dark::view-transition-new(root) {
   animation: dark-mode-reveal 650ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
@@ -169,859 +225,10 @@ html.dark ::-webkit-scrollbar-thumb:hover {
 }
 
 /* =====================================================================
- * THEME A — Terminal Session (UX redesign direction A)
- * The site is one persistent terminal session: title bar header, tmux
- * status bar footer, `ls -la` post list with permission bits encoding
- * visibility. Dual theme: LIGHT paper-terminal by default, dark via the
- * header toggle (html.dark).
+ * Markdown prose — the one place custom CSS remains: article and comment
+ * bodies are server-rendered HTML from D1, so there is no source to hang
+ * utility classes on. Everything else in the app is Tailwind utilities.
  * =================================================================== */
-:root {
-  /* shadcn token layer → terminal LIGHT palette (search palette & dialogs).
-     Pure-white surfaces + neutral/slate grays: the previous hue-45 "paper"
-     tint read yellow against the white page (admin used it full-bleed, the
-     grep palette and dialogs carried it, and it was the overscroll color).
-     Amber stays as the accent — primary/ring only. */
-  --background: 0 0% 100%;
-  --foreground: 215 15% 22%;
-  --card: 0 0% 100%;
-  --card-foreground: 215 15% 22%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 215 15% 22%;
-  --primary: 39 62% 42%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 0 0% 96.1%;
-  --secondary-foreground: 215 15% 22%;
-  --muted: 0 0% 96.1%;
-  --muted-foreground: 215 8% 42%;
-  --accent: 0 0% 96.1%;
-  --accent-foreground: 215 15% 22%;
-  --destructive: 2 56% 48%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 213 27% 84%;
-  --input: 213 27% 84%;
-  --ring: 39 62% 42%;
-  --radius: 0.375rem;
-
-  /* terminal LIGHT (paper terminal): default */
-  --t-bg: #ffffff;
-  --t-term: #fcfcfc;
-  --t-panel: #f6f6f6;
-  --t-line: #e4e4e4;
-  --t-text: #33363b;
-  --t-dim: #6f7480;
-  --t-faint: #a6a49a;
-  --t-amber: #a8752b;
-  --t-cyan: #0e7d92;
-  --t-green: #3c7a52;
-  --t-red: #b8483f;
-  --t-violet: #7a5fa8;
-  --t-sel: #ececec;
-  --t-titlebar-a: #ffffff;
-  --t-titlebar-b: #fcfcfc;
-  --t-tmux-bg: #f4f4f4;
-  --t-tmux-ink: #33363b;
-  --t-pre-bg: #fafafa;
-  --t-heading: #2b2f36;
-  --t-amber-ink: #fbfaf7;
-  --t-mono:
-    ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas,
-    "PingFang SC", "Microsoft YaHei", monospace;
-}
-
-html.dark {
-  /* shadcn token layer → terminal DARK palette */
-  --background: 210 29% 7%;
-  --foreground: 210 20% 83%;
-  --card: 211 30% 10%;
-  --card-foreground: 210 20% 83%;
-  --popover: 211 30% 9%;
-  --popover-foreground: 210 20% 83%;
-  --primary: 39 77% 60%;
-  --primary-foreground: 30 50% 8%;
-  --secondary: 211 30% 13%;
-  --secondary-foreground: 210 20% 83%;
-  --muted: 211 30% 13%;
-  --muted-foreground: 208 14% 56%;
-  --accent: 211 30% 15%;
-  --accent-foreground: 210 20% 88%;
-  --destructive: 2 66% 65%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 211 26% 17%;
-  --input: 211 26% 17%;
-  --ring: 39 77% 60%;
-
-  /* terminal DARK (original) */
-  --t-bg: #0a0f14;
-  --t-term: #0c1218;
-  --t-panel: #101923;
-  --t-line: #1d2a37;
-  --t-text: #c9d4de;
-  --t-dim: #71828f;
-  --t-faint: #465666;
-  --t-amber: #e9b44c;
-  --t-cyan: #6fc5d8;
-  --t-green: #7cbf8b;
-  --t-red: #e06c75;
-  --t-violet: #a78bc4;
-  --t-sel: #16222e;
-  --t-titlebar-a: #0e1620;
-  --t-titlebar-b: #0c1218;
-  --t-tmux-bg: #10161d;
-  --t-tmux-ink: #0a0f14;
-  --t-pre-bg: #0a1016;
-  --t-heading: #eaf1f7;
-  --t-amber-ink: #171106;
-}
-
-:root body {
-  font-family: var(--t-mono);
-  background-color: var(--t-bg);
-  color: var(--t-text);
-  font-size: 15.5px;
-  line-height: 1.75;
-}
-
-:root ::selection {
-  background: rgba(233, 180, 76, 0.25);
-}
-
-/* ---------- shell: title bar / main / tmux bar ---------- */
-.th-shell {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-}
-
-.th-titlebar {
-  position: relative; /* ⋯ 展开面板(.th-tools-sheet)的定位上下文 */
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  border-bottom: 1px solid var(--t-line);
-  background: linear-gradient(var(--t-titlebar-a), var(--t-titlebar-b));
-}
-
-.th-dot {
-  flex-shrink: 0; /* 右侧工具区过宽时不许把红绿灯挤塌 */
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-}
-.th-dot-r {
-  background: #e5544b;
-}
-.th-dot-y {
-  background: #d8a03c;
-}
-.th-dot-g {
-  background: #47a258;
-}
-
-.th-term-title {
-  margin-left: 10px;
-  color: var(--t-dim);
-  font-size: 12.5px;
-  /* 空间不足时标题先截断/让位,保住红绿灯和右侧工具 */
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-@media (max-width: 599px) {
-  .th-term-title {
-    display: none;
-  }
-}
-.th-term-title b {
-  color: var(--t-text);
-  font-weight: 600;
-}
-.th-term-title a {
-  color: inherit;
-  text-decoration: none;
-}
-.th-term-title a:hover b {
-  color: var(--t-amber);
-}
-.th-term-title .th-path {
-  color: var(--t-cyan);
-}
-
-.th-main {
-  flex: 1;
-  overflow-y: auto;
-  background: var(--t-term);
-}
-
-.th-page {
-  width: 100%;
-  /* 全站唯一容器宽度(Page 组件);文章正文另由 .md 的 74ch 阅读列约束 */
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 26px 22px 46px;
-}
-
-/* Mid-size windows (~640-1100px): the 1020px column doesn't bind yet, so the
-   article would hug both edges with only the 22px gutter. Widen the gutter
-   in that band so the column reads as centered. */
-@media (min-width: 640px) and (max-width: 1100px) {
-  .th-page {
-    padding-left: 44px;
-    padding-right: 44px;
-  }
-}
-
-/* ---------- tmux footer ---------- */
-.th-tmux {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-wrap: wrap;
-  padding: 6px 14px;
-  border-top: 1px solid var(--t-line);
-  background: var(--t-tmux-bg);
-  font-size: 12.5px;
-}
-.th-tmux-sess {
-  color: var(--t-tmux-ink);
-  background: var(--t-green);
-  padding: 1px 8px;
-  border-radius: 3px;
-  margin-right: 8px;
-  font-weight: 700;
-}
-.th-tmux-win {
-  color: var(--t-dim);
-  padding: 1px 8px;
-  border-radius: 3px;
-}
-a.th-tmux-win:hover {
-  color: var(--t-text);
-  text-decoration: none;
-}
-.th-tmux-win.th-on {
-  background: var(--t-term);
-  color: var(--t-amber);
-  box-shadow: inset 0 0 0 1px var(--t-line);
-}
-.th-tmux-right {
-  margin-left: auto;
-  color: var(--t-faint);
-  display: flex;
-  gap: 14px;
-}
-/* 窄屏 tmux 条单行放不下,收起右侧版权(非关键信息) */
-@media (max-width: 560px) {
-  .th-tmux-right {
-    display: none;
-  }
-}
-/* 超窄屏(≤430)再收:去掉会话徽标、收紧窗口链接,保证单行 */
-@media (max-width: 430px) {
-  .th-tmux {
-    gap: 2px;
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-  .th-tmux-sess {
-    display: none;
-    margin-right: 0;
-  }
-  .th-tmux-win {
-    padding: 1px 6px;
-  }
-}
-
-/* ---------- prompt primitives ---------- */
-.th-prompt {
-  display: flex;
-  gap: 10px;
-  align-items: baseline;
-  flex-wrap: wrap;
-}
-.th-prompt-u {
-  color: var(--t-cyan);
-}
-.th-prompt-at {
-  color: var(--t-faint);
-}
-.th-prompt-h {
-  color: var(--t-green);
-}
-.th-prompt-p {
-  color: var(--t-amber);
-}
-.th-cmd {
-  color: var(--t-text);
-}
-.th-cmd-dim {
-  color: var(--t-dim);
-}
-a.th-cmd:hover {
-  color: var(--t-amber);
-}
-.th-out {
-  /* 只管 margin-bottom:自定义规则在 Tailwind utilities 之后,若在这里写
-     margin 简写/top,会永远压过元素上的 mt-2/mt-4 等间距工具类 */
-  margin-bottom: 4px;
-}
-.th-comment {
-  color: var(--t-faint);
-}
-.th-hr {
-  border: 0;
-  border-top: 1px dashed var(--t-line);
-  margin: 20px 0;
-}
-
-/* ---------- titlebar tools ---------- */
-.th-tools {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.th-tool-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  gap: 4px;
-  height: 24px;
-  padding: 0 8px;
-  line-height: 1; /* icon and text share one optical center line */
-  color: var(--t-dim);
-  background: none;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 13px;
-  font-family: inherit;
-}
-/* 触屏没有真 hover,点按后 :hover 态会粘滞到下一次点按——hover 只给指针设备 */
-@media (hover: hover) {
-  .th-tool-btn:hover {
-    color: var(--t-amber);
-    text-decoration: none;
-  }
-}
-/* ≤480px:工具收进 ⋯ 菜单;面板在 titlebar 下方平铺展开(无抽屉无动画) */
-.th-tools-toggle {
-  display: none;
-}
-.th-tools-sheet {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid var(--t-line);
-  /* 面板色(同 tmux 底栏一族)而非纯白:窄屏下这块悬浮区要读作 header 的
-     延伸,一张带重阴影的纯白卡片会和细条 header 割裂 */
-  background: var(--t-panel);
-  padding: 4px 12px 10px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
-}
-.th-tools-sheet a,
-.th-tools-sheet button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 10px;
-  font-family: var(--t-mono);
-  font-size: 13px;
-  color: var(--t-dim);
-  background: none;
-  border: 0;
-  cursor: pointer;
-  text-align: left;
-}
-@media (hover: hover) {
-  .th-tools-sheet a:hover,
-  .th-tools-sheet button:hover {
-    color: var(--t-amber);
-    text-decoration: none;
-  }
-}
-@media (max-width: 480px) {
-  .th-tools > :not(.th-tools-toggle):not(.th-user-chip):not(.th-dark-btn) {
-    display: none;
-  }
-  .th-tools-toggle {
-    display: inline-flex;
-  }
-}
-@media (min-width: 481px) {
-  .th-tools-sheet {
-    display: none;
-  }
-}
-.th-user-chip {
-  /* 登录态徽章:只展示用户名(邮箱在悬停提示里),方角、24px 高与工具按钮
-     对齐;名字超长自动截断 */
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 24px;
-  padding: 0 8px;
-  border: 1px solid var(--t-line);
-  border-radius: 4px;
-  background: var(--t-panel);
-  font-size: 12px;
-  line-height: 1;
-  min-width: 0;
-}
-.th-user-name {
-  display: block;
-  min-width: 0;
-  max-width: 16ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--t-cyan);
-}
-.th-user-chip .th-role-badge {
-  flex-shrink: 0;
-  border-radius: 3px;
-}
-.th-role-badge {
-  background: var(--t-amber);
-  color: var(--t-amber-ink);
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 1px 7px;
-}
-
-/* ---------- buttons / forms ---------- */
-.th-btn {
-  font-family: var(--t-mono);
-  font-size: 13.5px;
-  /* 控件显式收紧行高:继承正文 1.75 会把按钮撑到 44px 高,视觉笨重 */
-  line-height: 1.4;
-  cursor: pointer;
-  background: var(--t-panel);
-  color: var(--t-text);
-  border: 1px solid var(--t-line);
-  border-radius: 6px;
-  padding: 7px 14px;
-  transition:
-    border-color 0.12s,
-    color 0.12s;
-}
-.th-btn:hover {
-  border-color: var(--t-amber);
-  color: var(--t-amber);
-}
-.th-btn-primary {
-  /* 主按钮 = 编辑器模式切换的激活态同款:琥珀底 + amber-ink 字,
-     主题各自取色(浅色是柔和的棕琥珀+奶油字,暗色是亮琥珀+墨字) */
-  background: var(--t-amber);
-  border-color: var(--t-amber);
-  color: var(--t-amber-ink);
-}
-.th-btn-primary:hover {
-  filter: brightness(0.94);
-  border-color: var(--t-amber);
-  color: var(--t-amber-ink);
-}
-
-/* ---------- buttons / forms ---------- */
-/* 表单页(登录/注册/解锁)整体字号比正文低一档:表单是聚焦场景,文字应该更安静 */
-.th-auth {
-  font-size: 13px;
-}
-
-.th-field {
-  margin: 14px 0;
-  max-width: 420px;
-}
-.th-field label {
-  display: block;
-  color: var(--t-dim);
-  font-size: 12.5px;
-  margin-bottom: 5px;
-}
-.th-field label::before {
-  content: "▸ ";
-  color: var(--t-amber);
-}
-.th-input {
-  font-family: var(--t-mono);
-  font-size: 13.5px;
-  line-height: 1.4;
-  color: var(--t-text);
-  background: var(--t-panel);
-  border: 1px solid var(--t-line);
-  border-radius: 6px;
-  padding: 8px 10px;
-  width: 100%;
-}
-.th-input::placeholder {
-  color: var(--t-faint);
-}
-.th-input:focus {
-  outline: none;
-  border-color: var(--t-amber);
-  box-shadow: 0 0 0 2px rgba(233, 180, 76, 0.15);
-}
-.th-err {
-  color: var(--t-red);
-  margin: 10px 0;
-  font-size: 13.5px;
-}
-
-/* ---------- admin(后台)终端化:与前台共用色板与节奏 ---------- */
-.th-admin-title {
-  color: var(--t-heading);
-  font-size: 17px;
-  font-weight: 600;
-}
-.th-panel {
-  border: 1px dashed var(--t-line);
-  border-radius: 6px;
-  background: var(--t-panel);
-  padding: 16px;
-}
-.th-flabel {
-  display: block;
-  color: var(--t-dim);
-  font-size: 12.5px;
-  margin-bottom: 5px;
-}
-.th-flabel::before {
-  content: "▸ ";
-  color: var(--t-amber);
-}
-.th-panel .th-input {
-  /* 同上:面板内控件的底色不能与面板同色。
-     用 background-color 而非简写,保住 select 自绘箭头的 background-image */
-  background-color: var(--t-bg);
-}
-.th-btn-danger {
-  color: var(--t-red);
-  border-color: color-mix(in srgb, var(--t-red) 45%, transparent);
-}
-.th-btn-danger:hover {
-  border-color: var(--t-red);
-  color: var(--t-red);
-  background: color-mix(in srgb, var(--t-red) 10%, transparent);
-}
-.th-btn-sm {
-  padding: 3px 10px;
-  font-size: 12.5px;
-}
-.th-badge {
-  display: inline-block;
-  border: 1px solid currentColor;
-  border-radius: 3px;
-  padding: 0 6px;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1.7;
-}
-.th-badge-green {
-  color: var(--t-green);
-}
-.th-badge-cyan {
-  color: var(--t-cyan);
-}
-.th-badge-amber {
-  color: var(--t-amber);
-}
-.th-badge-red {
-  color: var(--t-red);
-}
-.th-badge-faint {
-  color: var(--t-faint);
-}
-.th-admin-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 16px;
-  padding: 10px 4px;
-  border-bottom: 1px dashed var(--t-line);
-}
-.th-admin-row:last-child {
-  border-bottom: none;
-}
-.th-admin-row:hover {
-  background: var(--t-sel);
-}
-@media (max-width: 640px) {
-  .th-admin-row {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
-}
-.th-admin-title-link:hover {
-  color: var(--t-amber);
-}
-.th-tagbox {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid var(--t-line);
-  border-radius: 6px;
-  /* 面板内的控件用页面底色,和 --t-panel 面板拉开层次 */
-  background: var(--t-bg);
-  padding: 6px 10px;
-  cursor: text;
-}
-.th-tagbox:focus-within {
-  border-color: var(--t-amber);
-  box-shadow: 0 0 0 2px rgba(233, 180, 76, 0.15);
-}
-.th-tag-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  border: 1px solid var(--t-line);
-  border-radius: 3px;
-  padding: 1px 7px;
-  font-size: 12px;
-  color: var(--t-amber);
-}
-.th-tag-chip button {
-  color: var(--t-faint);
-}
-.th-tag-chip button:hover {
-  color: var(--t-red);
-}
-.th-tag-suggest {
-  border: 1px dashed var(--t-line);
-  border-radius: 3px;
-  padding: 1px 7px;
-  font-size: 12px;
-  color: var(--t-cyan);
-  background: none;
-  cursor: pointer;
-  font-family: var(--t-mono);
-}
-.th-tag-suggest:hover {
-  color: var(--t-amber);
-  border-color: var(--t-amber);
-}
-
-/* ---------- shadcn Select 弹层(终端化) ---------- */
-.th-select-content {
-  border: 1px solid var(--t-line);
-  border-radius: 6px;
-  background: var(--t-bg);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
-  font-family: var(--t-mono);
-  font-size: 13px;
-  padding: 4px;
-  min-width: var(--radix-select-trigger-width);
-}
-.th-select-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border-radius: 4px;
-  padding: 6px 8px;
-  color: var(--t-text);
-  cursor: pointer;
-  outline: none;
-  user-select: none;
-}
-.th-select-item[data-highlighted] {
-  background: var(--t-sel);
-  color: var(--t-amber);
-}
-.th-select-item[data-state="checked"] {
-  color: var(--t-amber);
-}
-.th-err::before {
-  content: "✗ ";
-}
-
-/* ---------- home ---------- */
-.th-figlet {
-  white-space: pre;
-  color: var(--t-faint);
-  line-height: 1.25;
-  font-size: 11px;
-  margin-top: 18px;
-  user-select: none;
-}
-.th-figlet b {
-  color: var(--t-amber);
-  font-weight: 400;
-}
-.th-home-links {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 12px;
-  margin-top: 22px;
-}
-.th-home-links a {
-  display: block;
-  border: 1px solid var(--t-line);
-  background: var(--t-panel);
-  padding: 14px 16px;
-  border-radius: 6px;
-  color: var(--t-text);
-}
-.th-home-links a:hover {
-  border-color: var(--t-amber);
-  text-decoration: none;
-  box-shadow: 0 0 18px rgba(233, 180, 76, 0.07);
-}
-.th-home-links .k {
-  color: var(--t-amber);
-}
-
-/* ---------- ls table (blog list) ---------- */
-.th-ls {
-  margin-top: 12px;
-}
-.th-ls-row {
-  display: grid;
-  grid-template-columns: 7ch 1fr auto;
-  gap: 0 14px;
-  padding: 5px 8px;
-  border-radius: 4px;
-  align-items: baseline;
-}
-
-/* Vis column shown: give it a fixed slot so titles don't shift. */
-.th-ls--vis .th-ls-row {
-  grid-template-columns: 7ch 8ch 1fr auto;
-}
-a.th-ls-row {
-  color: var(--t-text);
-}
-a.th-ls-row:hover {
-  background: var(--t-sel);
-  text-decoration: none;
-}
-.th-ls-year {
-  grid-column: 1 / -1;
-  color: var(--t-amber);
-  margin-top: 20px;
-  font-weight: 700;
-}
-.th-ls-year::before {
-  content: "# ";
-  color: var(--t-faint);
-  font-weight: 400;
-}
-.th-ls-date,
-.th-ls-vis {
-  color: var(--t-dim);
-  font-size: 13px;
-}
-.th-ls-title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.th-ls-tags {
-  color: var(--t-faint);
-  font-size: 12.5px;
-}
-.th-pager {
-  display: flex;
-  gap: 18px;
-  justify-content: center;
-  margin-top: 26px;
-  color: var(--t-dim);
-  font-size: 13.5px;
-}
-.th-pager a {
-  color: var(--t-amber);
-}
-.th-pager .th-pager-off {
-  color: var(--t-faint);
-  opacity: 0.6;
-}
-.th-cd {
-  color: var(--t-dim);
-}
-.th-cd:hover {
-  color: var(--t-text);
-}
-
-@media (max-width: 720px) {
-  .th-ls-row {
-    grid-template-columns: 7ch 1fr;
-  }
-  .th-ls-vis,
-  .th-ls-tags {
-    display: none;
-  }
-}
-
-/* projects ls rows: star / project+desc / stack / links */
-.th-proj-list {
-  margin-top: 12px;
-}
-.th-proj-card {
-  padding: 16px 0;
-  border-bottom: 1px dashed var(--t-line);
-}
-.th-proj-card:last-child {
-  border-bottom: none;
-}
-.th-proj-top {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-.th-proj-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--t-text);
-}
-.th-proj-links {
-  display: flex;
-  gap: 12px;
-  flex: none;
-}
-.th-proj-links a {
-  color: var(--t-amber);
-  font-size: 13px;
-}
-.th-proj-links a:hover {
-  text-decoration: underline;
-}
-.th-proj-desc {
-  margin-top: 4px;
-  font-size: 13.5px;
-  line-height: 1.7;
-  color: var(--t-dim);
-}
-.th-proj-tags {
-  margin-top: 6px;
-  font-size: 12px;
-  color: var(--t-faint);
-}
-
-/* ---------- article ---------- */
-.th-art-head {
-  margin: 16px 0 26px;
-}
-.th-art-title {
-  font-size: 28px;
-  color: var(--t-heading);
-  font-weight: 700;
-  line-height: 1.4;
-}
-.th-art-meta {
-  color: var(--t-dim);
-  margin-top: 6px;
-  font-size: 13px;
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
 
 /* markdown body (article prose) — fills the 880px container; the reading
    measure comes from the container itself, not a per-element cap. Prose is
@@ -1030,7 +237,7 @@ a.th-ls-row:hover {
    and code. */
 :root .md p {
   margin: 14px 0;
-  color: var(--t-text);
+  color: var(--foreground);
 }
 :root .md p,
 :root .md li,
@@ -1043,14 +250,14 @@ a.th-ls-row:hover {
 }
 :root .md h2 {
   font-size: 20px;
-  color: var(--t-heading);
+  color: var(--foreground);
   font-weight: 700;
   margin: 30px 0 10px;
   scroll-margin-top: 20px;
 }
 :root .md h2::before {
   content: "## ";
-  color: var(--t-faint);
+  color: var(--muted-foreground);
   font-weight: 400;
 }
 :root .md h2 a {
@@ -1064,73 +271,33 @@ a.th-ls-row:hover {
   margin: 4px 0;
 }
 :root .md li::marker {
-  color: var(--t-amber);
+  color: var(--primary);
 }
 :root .md a {
-  color: var(--t-cyan);
+  color: var(--chart-1);
 }
 :root .md a:hover {
   text-decoration: underline;
 }
 :root .md blockquote {
-  border-left: 2px solid var(--t-amber);
-  background: var(--t-panel);
+  border-left: 2px solid var(--primary);
+  background: var(--secondary);
   padding: 10px 16px;
   margin: 16px 0;
-  color: var(--t-dim);
+  color: var(--muted-foreground);
   border-radius: 0 6px 6px 0;
 }
-:root .th-cmt-body code {
-  background: var(--t-panel);
-  border: 1px solid var(--t-line);
-  border-radius: 4px;
-  padding: 0 5px;
-  font-size: 0.9em;
-  color: var(--t-amber);
-}
 :root .md code.md-inline {
-  background: var(--t-panel);
-  border: 1px solid var(--t-line);
+  background: var(--secondary);
+  border: 1px solid var(--border);
   padding: 1px 6px;
   border-radius: 4px;
   font-size: 13px;
-  color: var(--t-amber);
-}
-.th-code {
-  position: relative;
-  margin: 18px 0;
-}
-.th-code-copy {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  z-index: 10;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  border: 1px solid var(--t-line);
-  background: var(--t-panel);
-  color: var(--t-dim);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-size: 11px;
-  font-family: var(--t-mono);
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-.th-code:hover .th-code-copy,
-.th-code-copy:focus-visible {
-  opacity: 1;
-}
-@media not (hover: hover) {
-  .th-code-copy {
-    opacity: 0.75;
-  }
+  color: var(--primary);
 }
 :root .md pre.th-pre {
-  background: var(--t-pre-bg);
-  border: 1px solid var(--t-line);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 18px;
   overflow-x: auto;
@@ -1142,11 +309,12 @@ a.th-ls-row:hover {
    the vitesse-light tokens, dark swaps to vitesse-dark via the span rule). */
 :root .md pre.th-pre {
   /* biome-ignore lint/complexity/noImportantStyles: shiki inline light bg must be overridden. */
-  background: var(--t-pre-bg) !important;
+  background: #fafafa !important;
 }
 html.dark .md pre.th-pre {
+  background: #0a1016;
   /* biome-ignore lint/complexity/noImportantStyles: shiki inline light color must be overridden in dark mode. */
-  color: var(--t-text) !important;
+  color: var(--foreground) !important;
 }
 html.dark .md pre.th-pre span {
   /* biome-ignore lint/complexity/noImportantStyles: force shiki dark tokens in dark mode (SSR-safe). */
@@ -1155,319 +323,4 @@ html.dark .md pre.th-pre span {
 :root .md .th-pre code {
   background: none;
   padding: 0;
-}
-
-/* ---------- comments ---------- */
-.th-cmt {
-  border: 1px solid var(--t-line);
-  border-radius: 8px;
-  margin: 12px 0;
-  overflow: hidden;
-}
-.th-cmt-head {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  background: var(--t-panel);
-  padding: 8px 14px;
-  font-size: 13px;
-  color: var(--t-dim);
-  border-bottom: 1px solid var(--t-line);
-}
-.th-cmt-head .who {
-  color: var(--t-text);
-}
-.th-cmt-body {
-  padding: 10px 14px;
-}
-.th-cmt-body :where(p) {
-  margin: 0 0 8px;
-}
-.th-cmt-body p:last-child {
-  margin-bottom: 0;
-}
-.th-cmt-body :where(blockquote) {
-  border-left: 2px solid var(--t-line);
-  padding-left: 12px;
-  color: var(--t-dim);
-}
-.th-cmt-ops {
-  display: flex;
-  gap: 14px;
-  padding: 0 14px 10px;
-  font-size: 12px;
-}
-.th-cmt-ops button {
-  color: var(--t-dim);
-  cursor: pointer;
-  background: none;
-  font-family: inherit;
-}
-.th-cmt-ops button:hover {
-  color: var(--t-amber);
-}
-.th-cmt-ops .del:hover {
-  color: var(--t-red);
-}
-.th-cmt-replies {
-  border-top: 1px dashed var(--t-line);
-  background: var(--t-sel);
-  padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.th-cmt-reply {
-  border-left: 2px solid var(--t-line);
-  padding-left: 12px;
-}
-.th-cmt-form textarea {
-  width: 100%;
-  resize: vertical;
-  font-family: var(--t-mono);
-  font-size: 13.5px;
-  color: var(--t-text);
-  background: var(--t-panel);
-  border: 1px solid var(--t-line);
-  border-radius: 6px;
-  padding: 9px 12px;
-}
-.th-cmt-form textarea:focus {
-  outline: none;
-  border-color: var(--t-amber);
-}
-.th-cmt-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 8px;
-}
-.th-cmt-hint {
-  font-size: 12px;
-  color: var(--t-faint);
-}
-
-/* ---------- misc ---------- */
-.th-nf-big {
-  color: var(--t-red);
-}
-.th-devhint {
-  border: 1px dashed rgba(233, 180, 76, 0.5);
-  background: rgba(233, 180, 76, 0.06);
-  color: var(--t-amber);
-  border-radius: 6px;
-  padding: 8px 14px;
-  font-size: 13px;
-  margin-bottom: 18px;
-}
-
-/* ---------- terminal search palette (grep) ---------- */
-/* Scoped reskin of the shadcn Dialog + cmdk palette: drop from the top like a
-   terminal window, mono throughout, `~ %` prompt instead of a magnifier. */
-/* ---------- confirm dialog(shadcn Dialog 的终端皮肤化,同 th-pal) ---------- */
-.th-confirm {
-  /* 居中改用独立的 translate 属性:tailwindcss-animate 的 keyframe 会整个
-     覆盖 transform,若靠 translate-x/y 工具类居中,缩放动画就会从未居中的
-     位置(视觉上右下角)飞入——th-pal 同款解法 */
-  top: 50%;
-  transform: none;
-  translate: -50% -50%;
-  max-width: min(440px, calc(100vw - 32px));
-  border: 1px solid var(--t-line);
-  border-radius: 10px;
-  background: var(--t-term);
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
-  font-family: var(--t-mono);
-  gap: 14px;
-  text-align: left;
-}
-.th-confirm > button {
-  display: none; /* 终端用 esc/取消关闭,不显示 ✕ */
-}
-.th-confirm-prompt {
-  color: var(--t-amber);
-}
-.th-confirm-desc {
-  color: var(--t-dim);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.th-pal {
-  top: 14vh;
-  transform: none;
-  translate: -50% 0;
-  max-width: min(640px, calc(100vw - 32px));
-  border: 1px solid var(--t-line);
-  border-radius: 10px;
-  background: var(--t-term);
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
-  font-family: var(--t-mono);
-}
-.th-pal > button {
-  display: none; /* terminals close with esc, not an ✕ */
-}
-.th-pal-cmd {
-  background: var(--t-term);
-  color: var(--t-text);
-  border-radius: 10px;
-  overflow: hidden;
-}
-.th-pal [cmdk-input-wrapper] {
-  border-bottom: 1px dashed var(--t-line);
-  padding: 13px 16px;
-  gap: 10px;
-}
-.th-pal [cmdk-input-wrapper] svg {
-  display: none;
-}
-.th-pal [cmdk-input-wrapper]::before {
-  content: "~ %";
-  color: var(--t-amber);
-  font-family: var(--t-mono);
-  font-size: 15px;
-  flex: none;
-}
-.th-pal [cmdk-input] {
-  height: auto;
-  font-family: var(--t-mono);
-  font-size: 15px;
-  color: var(--t-text);
-  caret-color: var(--t-amber);
-  padding: 0;
-}
-.th-pal [cmdk-input]::placeholder {
-  color: var(--t-faint);
-}
-.th-pal [cmdk-list] {
-  height: auto;
-  max-height: 320px;
-  padding: 6px 0;
-}
-.th-pal [cmdk-empty] {
-  padding: 18px 16px;
-  text-align: left;
-  color: var(--t-faint);
-  font-size: 13px;
-}
-.th-pal [cmdk-group] {
-  padding: 0 8px;
-}
-.th-pal [cmdk-item] {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  padding: 8px 10px;
-  border-radius: 4px;
-  font-family: var(--t-mono);
-  font-size: 14px;
-  color: var(--t-text);
-}
-.th-pal-date {
-  color: var(--t-faint);
-  font-size: 11.5px;
-  min-width: 6ch;
-}
-.th-pal-title {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.th-pal-vis {
-  color: var(--t-dim);
-  font-size: 11px;
-}
-.th-pal [cmdk-item][aria-selected="true"] {
-  background: var(--t-sel);
-  color: var(--t-text);
-}
-.th-pal [cmdk-item][aria-selected="true"] .th-pal-title {
-  color: var(--t-amber);
-}
-.th-pal-foot {
-  border-top: 1px solid var(--t-line);
-  padding: 7px 16px;
-  color: var(--t-faint);
-  font-size: 11.5px;
-}
-
-/* ---------- search palette: mobile = full-screen sheet ---------- */
-/* 居中小窗是桌面命令面板的形态;触屏上它悬在软键盘上方只剩一条缝,且 esc/↑↓
-   提示全部失效。窄屏改为贴顶通栏的 full-screen sheet,由右上角 ✕ 负责关闭。 */
-@media (max-width: 640px) {
-  .th-pal {
-    top: 0;
-    left: 0;
-    right: 0;
-    translate: none;
-    width: 100%;
-    max-width: none;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    border-radius: 0;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-  }
-  /* 全屏铺开后 overlay 不可点、触屏也没有 esc——把被桌面隐藏的 ✕ 找回来 */
-  .th-pal > button {
-    display: flex;
-    color: var(--t-text);
-  }
-  /* ✕ 落在输入行右端,给输入文字让位 */
-  .th-pal [cmdk-input-wrapper] {
-    padding-right: 44px;
-  }
-  .th-pal-cmd {
-    flex: 1;
-    min-height: 0;
-  }
-  .th-pal [cmdk-list] {
-    flex: 1;
-    max-height: none;
-  }
-  .th-pal-foot {
-    display: none; /* ↑↓/↵/esc 是键盘暗示,触屏上无意义 */
-  }
-}
-
-/* ---------- terminal titlebar: small screens ---------- */
-@media (max-width: 640px) {
-  .th-titlebar {
-    padding: 8px 12px;
-    gap: 5px;
-  }
-  /* 品牌名是必须保住的最低信息量;路径后缀和分隔线在窄屏直接隐藏 */
-  .th-term-title {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 12px;
-  }
-  .th-term-sep,
-  .th-term-title .th-path {
-    display: none;
-  }
-  /* 工具收成纯图标,间距收紧 */
-  .th-tools {
-    gap: 2px;
-  }
-  .th-tool-btn {
-    padding: 0 5px;
-  }
-  .th-tool-btn > span {
-    display: none;
-  }
-  /* 字符画随视口流式缩放:任何宽度都整幅放下,不需要横向滚动。
-     34.5 = 字符画最长行字符数 × mono 字符宽比(0.6em) */
-  .th-figlet {
-    font-size: min(11px, calc((100vw - 32px) / 34.5));
-  }
-  .th-page {
-    padding: 20px 14px 40px;
-  }
 }

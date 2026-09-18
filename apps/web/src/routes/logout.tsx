@@ -35,7 +35,7 @@ function LogoutPage() {
         {isPending ? '正在退出登录...' : '已退出或退出失败，请重试。'}
       </p>
       {error ? (
-        <p className='mb-4 rounded-md bg-red-100 px-3 py-2 text-red-700 dark:bg-red-900/30 dark:text-red-300'>
+        <p className='mb-4 rounded-md bg-destructive/15 px-3 py-2 text-destructive dark:bg-destructive/20 dark:text-destructive'>
           {error}
         </p>
       ) : null}
@@ -44,7 +44,7 @@ function LogoutPage() {
           type='button'
           onClick={signOut}
           disabled={isPending}
-          className='rounded-md bg-black px-4 py-2 font-semibold text-white transition-opacity hover:opacity-90 dark:bg-neutral-900'
+          className='rounded-md bg-black px-4 py-2 font-semibold text-white transition-opacity hover:opacity-90 dark:bg-muted'
         >
           {isPending ? 'Logging out...' : 'Retry Logout'}
         </button>

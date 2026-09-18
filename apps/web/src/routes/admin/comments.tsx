@@ -28,9 +28,11 @@ const STATUS_LABEL: Record<StatusFilter, string> = {
 };
 
 const STATUS_BADGE: Record<CommentStatus, string> = {
-  visible: 'th-badge th-badge-green',
-  hidden: 'th-badge th-badge-faint',
-  spam: 'th-badge th-badge-red',
+  visible:
+    'inline-block rounded-sm border border-current px-1.5 text-xs leading-relaxed font-bold tracking-wide text-chart-2',
+  hidden:
+    'inline-block rounded-sm border border-current px-1.5 text-xs leading-relaxed font-bold tracking-wide text-muted-foreground/60',
+  spam: 'inline-block rounded-sm border border-current px-1.5 text-xs leading-relaxed font-bold tracking-wide text-destructive',
 };
 
 function AdminCommentsPage() {
@@ -95,14 +97,19 @@ function AdminCommentsPage() {
 
   return (
     <div className='mx-auto w-full self-start max-w-5xl px-4 pt-8 pb-12 sm:px-6'>
-      <div className='th-prompt mb-2'>
-        <span className='th-prompt-p'>~ %</span>{' '}
-        <span className='th-cmd'>comments --moderate</span>
+      <div className='flex flex-wrap items-baseline gap-2.5 mb-2'>
+        <span className='text-primary'>~ %</span>{' '}
+        <span className='text-foreground hover:text-primary'>
+          comments --moderate
+        </span>
       </div>
-      <Link to='/admin' className='th-cd mb-4 inline-block text-sm'>
+      <Link
+        to='/admin'
+        className='text-muted-foreground hover:text-foreground mb-4 inline-block text-sm'
+      >
         ← 返回管理
       </Link>
-      <h1 className='th-admin-title mb-4'>评论审核</h1>
+      <h1 className='text-lg font-semibold text-foreground mb-4'>评论审核</h1>
 
       <div className='mb-4 flex flex-wrap items-center gap-2'>
         {STATUS_FILTERS.map((filter) => (
@@ -110,8 +117,10 @@ function AdminCommentsPage() {
             key={filter}
             type='button'
             onClick={() => setStatusFilter(filter)}
-            className={`th-btn th-btn-sm ${
-              statusFilter === filter ? 'th-btn-primary' : ''
+            className={`cursor-pointer rounded-md border border-border bg-secondary px-3.5 py-1.75 text-sm leading-snug text-foreground transition-[border-color,color] duration-100 hover:border-primary hover:text-primary px-2.5 py-0.75 text-xs ${
+              statusFilter === filter
+                ? 'border-primary bg-primary text-primary-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground hover:brightness-95'
+                : ''
             }`}
           >
             {STATUS_LABEL[filter]}
@@ -122,27 +131,34 @@ function AdminCommentsPage() {
           value={slugQuery}
           onChange={(event) => setSlugQuery(event.target.value)}
           placeholder='按 slug 筛选…'
-          className='th-input ml-auto w-48 py-1 text-xs'
+          className='w-full rounded-md border border-border bg-secondary px-2.5 py-2 text-sm leading-snug text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-primary focus:shadow-[0_0_0_2px_color-mix(in_srgb,var(--primary)_15%,transparent)] ml-auto w-48 py-1 text-xs'
         />
       </div>
 
-      {error ? <p className='th-err mb-3'>{error}</p> : null}
+      {error ? (
+        <p className='my-2.5 text-sm text-destructive mb-3'>{error}</p>
+      ) : null}
 
       {filtered.length === 0 ? (
-        <div className='th-comment px-6 py-16 text-center'>
+        <div className='text-muted-foreground/60 px-6 py-16 text-center'>
           # 没有符合条件的评论。
         </div>
       ) : (
         <ul className='flex flex-col gap-3'>
           {filtered.map((comment) => (
-            <li key={comment.id} className='th-panel'>
+            <li
+              key={comment.id}
+              className='rounded-md border border-dashed border-border bg-secondary p-4'
+            >
               <div className='mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs'>
                 <span className='font-semibold'>{comment.author.name}</span>
                 {comment.author.role === 'admin' ? (
-                  <span className='th-badge th-badge-amber'>AUTHOR</span>
+                  <span className='inline-block rounded-sm border border-current px-1.5 text-xs leading-relaxed font-bold tracking-wide text-primary'>
+                    AUTHOR
+                  </span>
                 ) : null}
                 <span
-                  className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${STATUS_BADGE[comment.status]}`}
+                  className={`rounded px-1.5 py-0.5 text-xs font-semibold ${STATUS_BADGE[comment.status]}`}
                 >
                   {STATUS_LABEL[comment.status]}
                 </span>
@@ -174,7 +190,7 @@ function AdminCommentsPage() {
                     type='button'
                     disabled={busy.has(comment.id)}
                     onClick={() => setStatus(comment.id, 'spam')}
-                    className='th-cd disabled:opacity-40'
+                    className='text-muted-foreground hover:text-foreground disabled:opacity-40'
                   >
                     标垃圾
                   </button>
@@ -184,7 +200,7 @@ function AdminCommentsPage() {
                     type='button'
                     disabled={busy.has(comment.id)}
                     onClick={() => setStatus(comment.id, 'visible')}
-                    className='th-cd disabled:opacity-40'
+                    className='text-muted-foreground hover:text-foreground disabled:opacity-40'
                   >
                     恢复
                   </button>
@@ -195,7 +211,7 @@ function AdminCommentsPage() {
                   onClick={() => {
                     setPendingDelete(comment.id);
                   }}
-                  className='ml-auto text-red-500/70 hover:text-red-500 disabled:opacity-40'
+                  className='ml-auto text-destructive/70 hover:text-destructive disabled:opacity-40'
                 >
                   删除
                 </button>

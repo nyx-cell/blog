@@ -34,3 +34,7 @@ test-results
 apps/**/.vercel
 apps/cms/
 .claude/worktrees/
+
+# TanStack dev-server temp files
+apps/web/.tanstack/
+gui-test-screenshots/

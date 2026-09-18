@@ -18,8 +18,8 @@ type MarkdownProps = {
 
 /** Class names for the code block chrome + inline code. */
 const CODE_CLASSES = {
-  wrap: 'th-code group relative',
-  copy: 'th-code-copy',
+  wrap: 'group relative my-4.5 group relative',
+  copy: 'absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-1 rounded border border-border bg-secondary px-2 py-0.5 text-xs text-muted-foreground opacity-0 transition-opacity duration-150 group-hover:opacity-100 focus-visible:opacity-100 [@media(not(hover:hover))]:opacity-75',
   pre: 'shiki th-pre w-full overflow-x-auto',
   inline: 'md-inline',
 };

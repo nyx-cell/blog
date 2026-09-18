@@ -68,7 +68,7 @@ export function TagInput({
     <div className='grid gap-2'>
       {/* biome-ignore lint/a11y/noStaticElementInteractions: click-to-focus convenience; the enclosed <input> is the keyboard-accessible control. */}
       <div
-        className='th-tagbox'
+        className='flex cursor-text flex-wrap items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 focus-within:border-primary focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--primary)_15%,transparent)]'
         onMouseDown={(event) => {
           // Focus the input when pressing anywhere on the field (not on a chip).
           if (event.target === event.currentTarget) {
@@ -78,7 +78,10 @@ export function TagInput({
         }}
       >
         {value.map((tag) => (
-          <span key={tag} className='th-tag-chip'>
+          <span
+            key={tag}
+            className='inline-flex items-center gap-1 rounded-sm border border-border px-1.75 py-px text-xs text-primary [&_button]:text-muted-foreground/60 [&_button:hover]:text-destructive'
+          >
             {tag}
             <button
               type='button'
@@ -114,7 +117,7 @@ export function TagInput({
             <button
               key={tag}
               type='button'
-              className='th-tag-suggest'
+              className='cursor-pointer rounded-sm border border-dashed border-border bg-none px-1.75 py-px text-xs text-chart-1 hover:border-primary hover:text-primary'
               // preventDefault keeps the input focused (no blur commit).
               onMouseDown={(event) => {
                 event.preventDefault();

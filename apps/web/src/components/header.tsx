@@ -14,6 +14,7 @@ import { authClient } from '../lib/auth-client.js';
 import { ConfirmDialog } from './confirm-dialog.js';
 import { DarkMode } from './dark-mode.js';
 import { searchPalette } from './search-palette-store.js';
+import { SHEET_ROW, TOOL_BTN } from './term.js';
 
 function getRoleLabel(role?: string | null): string {
   if (role === 'admin') {
@@ -26,6 +27,10 @@ function getRoleLabel(role?: string | null): string {
 
   return 'MEMBER';
 }
+
+// Tools collapse behind the ⋯ toggle on ≤480px; the user chip, theme toggle
+// and the ⋯ itself stay visible.
+const TOOL_VIS = 'max-[480px]:hidden';
 
 /** Terminal title bar: window dots + session name + right-aligned tools.
  *  ≤480px the tool buttons collapse behind a ⋯ toggle that expands a flat
@@ -63,23 +68,38 @@ export function Header() {
   }, [toolsOpen]);
 
   return (
-    <header className='th-titlebar' ref={barRef}>
-      <span className='th-dot th-dot-r' aria-hidden='true' />
-      <span className='th-dot th-dot-y' aria-hidden='true' />
-      <span className='th-dot th-dot-g' aria-hidden='true' />
-      <span className='th-term-title'>
-        <Link to='/'>
-          <b>perfectpan@blog</b>
+    <header
+      ref={barRef}
+      className='relative flex items-center gap-2 border-b border-border bg-card px-4.5 py-2.5 max-[640px]:gap-1.25 max-[640px]:px-3 max-[640px]:py-2'
+    >
+      <span
+        className='size-2.75 shrink-0 rounded-full bg-[#e5544b]'
+        aria-hidden='true'
+      />
+      <span
+        className='size-2.75 shrink-0 rounded-full bg-[#d8a03c]'
+        aria-hidden='true'
+      />
+      <span
+        className='size-2.75 shrink-0 rounded-full bg-[#47a258]'
+        aria-hidden='true'
+      />
+      <span className='ml-2.5 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-foreground max-[599px]:hidden max-[640px]:text-xs'>
+        <Link to='/' className='text-inherit no-underline'>
+          <b className='font-semibold text-foreground'>perfectpan@blog</b>
         </Link>
       </span>
 
-      <div className='th-tools'>
+      <div className='ml-auto flex items-center gap-1 max-[640px]:gap-0.5'>
         {sessionUser ? (
-          <span className='th-user-chip' title={sessionUser.email}>
-            <span className='th-user-name'>
+          <span
+            className='inline-flex h-6 min-w-0 items-center gap-1.5 rounded border border-border bg-secondary px-2 text-xs leading-none'
+            title={sessionUser.email}
+          >
+            <span className='block min-w-0 max-w-[16ch] overflow-hidden text-ellipsis whitespace-nowrap text-chart-1'>
               {sessionUser.name || sessionUser.email}
             </span>
-            <span className='th-role-badge'>
+            <span className='shrink-0 rounded-full bg-primary px-1.75 py-px text-xs leading-normal font-bold text-primary-foreground'>
               {getRoleLabel(sessionUser.role)}
             </span>
           </span>
@@ -88,8 +108,8 @@ export function Header() {
           <Link
             to='/logout'
             data-testid='nav-logout'
-            className='th-tool-btn'
             aria-label='Logout'
+            className={`${TOOL_BTN} ${TOOL_VIS}`}
             onClick={(event) => {
               event.preventDefault();
               setLogoutOpen(true);
@@ -100,11 +120,19 @@ export function Header() {
           </Link>
         ) : (
           <>
-            <Link to='/login' data-testid='nav-login' className='th-tool-btn'>
+            <Link
+              to='/login'
+              data-testid='nav-login'
+              className={`${TOOL_BTN} ${TOOL_VIS}`}
+            >
               <UserRound size={15} aria-hidden='true' />
               <span className='hidden md:inline'>login</span>
             </Link>
-            <Link to='/signup' data-testid='nav-signup' className='th-tool-btn'>
+            <Link
+              to='/signup'
+              data-testid='nav-signup'
+              className={`${TOOL_BTN} ${TOOL_VIS}`}
+            >
               <UserRoundPlus size={15} aria-hidden='true' />
               <span className='hidden md:inline'>signup</span>
             </Link>
@@ -115,7 +143,7 @@ export function Header() {
           type='button'
           aria-label='Search posts (Cmd+K)'
           onClick={() => searchPalette.open()}
-          className='th-tool-btn'
+          className={`${TOOL_BTN} ${TOOL_VIS}`}
         >
           <Search size={15} aria-hidden='true' />
           <span className='hidden md:inline'>grep</span>
@@ -125,7 +153,7 @@ export function Header() {
           target='_blank'
           rel='noreferrer'
           aria-label='GitHub'
-          className='th-tool-btn'
+          className={`${TOOL_BTN} ${TOOL_VIS}`}
         >
           <Github size={15} aria-hidden='true' />
           <span className='hidden md:inline'>github</span>
@@ -135,14 +163,14 @@ export function Header() {
           target='_blank'
           rel='noreferrer'
           aria-label='RSS'
-          className='th-tool-btn'
+          className={`${TOOL_BTN} ${TOOL_VIS}`}
         >
           <Rss size={15} aria-hidden='true' />
           <span className='hidden md:inline'>rss</span>
         </a>
         <button
           type='button'
-          className='th-tool-btn th-tools-toggle'
+          className={`${TOOL_BTN} hidden max-[480px]:inline-flex`}
           aria-label={toolsOpen ? 'Close tools menu' : 'Open tools menu'}
           aria-expanded={toolsOpen}
           onClick={() => {
@@ -159,7 +187,7 @@ export function Header() {
       {toolsOpen ? (
         // Flat text sheet under the bar; every item closes it as its action
         // (the window-level Escape listener covers Esc as well).
-        <div className='th-tools-sheet'>
+        <div className='absolute inset-x-0 top-full z-40 hidden flex-col border-b border-border bg-secondary px-3 pt-1 pb-2.5 shadow-[0_12px_28px_rgba(0,0,0,0.14)] max-[480px]:flex'>
           {sessionUser ? (
             <button
               type='button'
@@ -167,6 +195,7 @@ export function Header() {
                 setToolsOpen(false);
                 setLogoutOpen(true);
               }}
+              className={SHEET_ROW}
             >
               <LogOut size={14} aria-hidden='true' /> logout
             </button>
@@ -177,6 +206,7 @@ export function Header() {
                 onClick={() => {
                   setToolsOpen(false);
                 }}
+                className={SHEET_ROW}
               >
                 <UserRound size={14} aria-hidden='true' /> login
               </Link>
@@ -185,6 +215,7 @@ export function Header() {
                 onClick={() => {
                   setToolsOpen(false);
                 }}
+                className={SHEET_ROW}
               >
                 <UserRoundPlus size={14} aria-hidden='true' /> signup
               </Link>
@@ -196,6 +227,7 @@ export function Header() {
               setToolsOpen(false);
               searchPalette.open();
             }}
+            className={SHEET_ROW}
           >
             <Search size={14} aria-hidden='true' /> grep
           </button>
@@ -206,6 +238,7 @@ export function Header() {
             onClick={() => {
               setToolsOpen(false);
             }}
+            className={SHEET_ROW}
           >
             <Github size={14} aria-hidden='true' /> github
           </a>
@@ -216,6 +249,7 @@ export function Header() {
             onClick={() => {
               setToolsOpen(false);
             }}
+            className={SHEET_ROW}
           >
             <Rss size={14} aria-hidden='true' /> rss
           </a>
